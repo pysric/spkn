@@ -7,12 +7,13 @@
   <style>
     body {
       font-family: sans-serif;
-      background: #000;
+      background: linear-gradient(to bottom, #0d0d1a, #1a1a2e);
       color: #eee;
       text-align: center;
       padding: 2rem;
+      overflow-x: hidden;
     }
-    button {
+    button, select {
       padding: 1rem 2rem;
       font-size: 1.2rem;
       border: none;
@@ -35,12 +36,43 @@
       background: #111;
       border-radius: 1rem;
     }
+    .mood-select {
+      margin-top: 1rem;
+      font-size: 1rem;
+      background: #222;
+      color: #fff;
+      border-radius: 12px;
+      padding: 0.5rem;
+      width: 80%;
+      max-width: 300px;
+    }
+    .mood-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .mood-options label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 </head>
 <body>
   <h1>🌙 Спокойной Ночи Generator 🇷🇺</h1>
+
+  <div class="mood-options">
+    <label><input type="checkbox" class="mood-box" value="sleepy" checked> 💤 Sleepy</label>
+    <label><input type="checkbox" class="mood-box" value="wholesome"> 🌈 Wholesome</label>
+    <label><input type="checkbox" class="mood-box" value="unhinged"> 🤡 Unhinged</label>
+    <label><input type="checkbox" class="mood-box" value="fiery"> 🔥 Over-the-top</label>
+  </div>
+
   <button onclick="generateMessage()">Send Love 💌</button>
   <button onclick="copyMessage()">Copy to Clipboard 📋</button>
+
   <div class="message" id="message"></div>
 
   <script>
@@ -53,13 +85,31 @@
       return shuffled.slice(0, count);
     }
 
+    function getMoodEmojis(selectedMoods) {
+      const allEmojis = {
+        wholesome: ['🌸','🫶','🐻','🪽','🍯','🍓','🧸','☁️','🫖','🐑'],
+        unhinged: ['🦑','🔫','🧌','🍗','👹','🪤','🥴','🚽','🐒','🧨'],
+        fiery: ['🔥','💣','💥','🥵','🗯️','💀','🚬','🔞','🧯','⚡'],
+        sleepy: ['🛌','💤','🧦','🧸','🌙','🕯️','📖','🧼','🫖','🧂']
+      };
+
+      let combined = [];
+      selectedMoods.forEach(m => {
+        combined = combined.concat(allEmojis[m] || []);
+      });
+      return combined;
+    }
+
     function generateMessage() {
+      const checkedMoods = Array.from(document.querySelectorAll('.mood-box:checked')).map(cb => cb.value);
+      const moodEmojis = getMoodEmojis(checkedMoods);
+
       const fixedEmojis = ['🎉','🤯','🤑','🤨','😀','😊','💤','😦','😻','😭'];
       const randomEmojis = [
         '🍕','🧃','📸','🍄','🚲','🏀','📚','🧩','🎮','🌈','🌍','🧸','🌻','🐸','🧦','🧼','📦','🥽','🚁','🐳',
         '🌶️','🧁','🪴','🍠','🥑','🍋','🍇','🎧','🎲','🎯','⛺','🎭','📯','📡','🪐','🔭','🗿','🧃','🧊','🥥','🪄',
         '🧃','🚿','🚛','🚂','🗺️','🌌','🪙','🎒','🔋','📀','🧲','📡','🕹️','🛷','⏰','📘','📕','📓','🧾','🛹'
-      ];
+      ].concat(moodEmojis);
 
       const iCount = getRandomInt(5, 14);
       const heartCount = getRandomInt(10, 15);
@@ -79,24 +129,24 @@
 
       emojis = emojis.concat(fixedEmojis);
       emojis = emojis.concat(getRandomItems(randomEmojis, Math.max(0, randomTotal - emojis.length)));
-
       emojis = emojis.sort(() => 0.5 - Math.random());
 
       const message = `спокойной ночи${'и'.repeat(iCount)} ${emojis.join('')}`;
-
       document.getElementById('message').innerText = message;
     }
 
     function copyMessage() {
       const messageText = document.getElementById('message').innerText;
       if (!messageText) return;
-
       navigator.clipboard.writeText(messageText).then(() => {
         alert('Message copied to clipboard! ✅');
       }, () => {
         alert('Failed to copy message. ❌');
       });
     }
+
+    // Auto-generate on page load
+    window.onload = generateMessage;
   </script>
 </body>
 </html>
