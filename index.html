@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Спокойной Ночи Generator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #000;
+      color: #eee;
+      text-align: center;
+      padding: 2rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background: #e63946;
+      color: white;
+      cursor: pointer;
+      margin-top: 1rem;
+      display: block;
+      width: 80%;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .message {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      word-break: break-word;
+      padding: 1rem;
+      background: #111;
+      border-radius: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌙 Спокойной Ночи Generator 🇷🇺</h1>
+  <button onclick="generateMessage()">Send Love 💌</button>
+  <button onclick="copyMessage()">Copy to Clipboard 📋</button>
+  <div class="message" id="message"></div>
+
+  <script>
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getRandomItems(array, count) {
+      const shuffled = array.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+    }
+
+    function generateMessage() {
+      const fixedEmojis = ['🎉','🤯','🤑','🤨','😀','😊','💤','😦','😻','😭'];
+      const randomEmojis = [
+        '🍕','🧃','📸','🍄','🚲','🏀','📚','🧩','🎮','🌈','🌍','🧸','🌻','🐸','🧦','🧼','📦','🥽','🚁','🐳',
+        '🌶️','🧁','🪴','🍠','🥑','🍋','🍇','🎧','🎲','🎯','⛺','🎭','📯','📡','🪐','🔭','🗿','🧃','🧊','🥥','🪄',
+        '🧃','🚿','🚛','🚂','🗺️','🌌','🪙','🎒','🔋','📀','🧲','📡','🕹️','🛷','⏰','📘','📕','📓','🧾','🛹'
+      ];
+
+      const iCount = getRandomInt(5, 14);
+      const heartCount = getRandomInt(10, 15);
+      const kissCount = getRandomInt(10, 15);
+      const lipsCount = getRandomInt(5, 7);
+      const flagCount = getRandomInt(10, 15);
+      const randomTotal = getRandomInt(50, 100);
+
+      let emojis = [];
+      emojis.push('❤️'.repeat(heartCount));
+      emojis.push('😘'.repeat(kissCount));
+      emojis.push('💋'.repeat(lipsCount));
+
+      for (let i = 0; i < flagCount; i++) {
+        emojis.push('🇷🇺');
+      }
+
+      emojis = emojis.concat(fixedEmojis);
+      emojis = emojis.concat(getRandomItems(randomEmojis, Math.max(0, randomTotal - emojis.length)));
+
+      emojis = emojis.sort(() => 0.5 - Math.random());
+
+      const message = `спокойной ночи${'и'.repeat(iCount)} ${emojis.join('')}`;
+
+      document.getElementById('message').innerText = message;
+    }
+
+    function copyMessage() {
+      const messageText = document.getElementById('message').innerText;
+      if (!messageText) return;
+
+      navigator.clipboard.writeText(messageText).then(() => {
+        alert('Message copied to clipboard! ✅');
+      }, () => {
+        alert('Failed to copy message. ❌');
+      });
+    }
+  </script>
+</body>
+</html>
