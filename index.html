@@ -8,21 +8,22 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: #000;
+      background: transparent;
       color: #eee;
       font-family: sans-serif;
       text-align: center;
-      height: 100%;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body {
+      position: relative;
     }
     canvas#rain {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       z-index: -1;
       pointer-events: none;
     }
@@ -36,6 +37,7 @@
       min-height: 100vh;
       padding: 2rem;
       box-sizing: border-box;
+      background: transparent;
     }
     button {
       padding: 1rem 2rem;
@@ -76,7 +78,7 @@
 <body>
   <canvas id="rain"></canvas>
   <div class="container">
-    <h1>🌙 Спокойной Ночи Generator</h1>
+    <h1>🌙 Спокойной Ночи Generator 🇷🇺</h1>
 
     <div class="mood-options">
       <label><input type="checkbox" class="mood-box" value="sleepy" checked> 💤 Sleepy</label>
@@ -92,7 +94,6 @@
   </div>
 
   <script>
-    // Rain effect
     const canvas = document.getElementById('rain');
     const ctx = canvas.getContext('2d');
     let width = window.innerWidth;
@@ -156,7 +157,7 @@
       const allEmojis = {
         wholesome: ['🌸','🫶','🐻','🪽','🍯','🍓','🧸','☁️','🫖','🐑'],
         unhinged: ['🦑','🔫','🧌','🍗','👹','🪤','🥴','🚽','🐒','🧨'],
-        fiery: ['🔥','💣','💥','🥵','🗯️','💀','🚬','🧯','⚡'],
+        fiery: ['🔥','💣','💥','🥵','🗯️','💀','🚬','🔞','🧯','⚡'],
         sleepy: ['🛌','💤','🧦','🧸','🌙','🕯️','📖','🧼','🫖','🧂']
       };
 
