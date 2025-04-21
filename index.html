@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌙 Спокойной Ночи Generator</title>
+  <title>Спокойной Ночи Generator</title>
   <style>
     html, body {
       margin: 0;
@@ -12,19 +12,22 @@
       color: #eee;
       font-family: sans-serif;
       text-align: center;
-      min-height: 100vh;
-      overflow-x: hidden;
+      overflow: hidden;
+    }
+    canvas#rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
     .container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       padding: 2rem;
-      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
     }
-    button {
+    button, select {
       padding: 1rem 2rem;
       font-size: 1.2rem;
       border: none;
@@ -33,8 +36,11 @@
       color: white;
       cursor: pointer;
       margin-top: 1rem;
+      display: block;
       width: 80%;
       max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .message {
       font-size: 1.5rem;
@@ -43,7 +49,6 @@
       padding: 1rem;
       background: #111;
       border-radius: 1rem;
-      max-width: 90vw;
     }
     .mood-options {
       display: flex;
@@ -61,8 +66,9 @@
   </style>
 </head>
 <body>
+  <canvas id="rain"></canvas>
   <div class="container">
-    <h1>🌙 Спокойной Ночи Generator</h1>
+    <h1>🌙 Спокойной Ночи Generator 🇷🇺</h1>
 
     <div class="mood-options">
       <label><input type="checkbox" class="mood-box" value="sleepy" checked> 💤 Sleepy</label>
@@ -78,6 +84,58 @@
   </div>
 
   <script>
+    // Rain effect
+    const canvas = document.getElementById('rain');
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const drops = [];
+    for (let i = 0; i < 300; i++) {
+      drops.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        length: Math.random() * 20 + 10,
+        speed: Math.random() * 4 + 2
+      });
+    }
+
+    function drawRain() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let drop of drops) {
+        ctx.moveTo(drop.x, drop.y);
+        ctx.lineTo(drop.x, drop.y + drop.length);
+      }
+      ctx.stroke();
+      updateRain();
+      requestAnimationFrame(drawRain);
+    }
+
+    function updateRain() {
+      for (let drop of drops) {
+        drop.y += drop.speed;
+        if (drop.y > height) {
+          drop.y = -drop.length;
+          drop.x = Math.random() * width;
+        }
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    drawRain();
+
+    // Generator
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
